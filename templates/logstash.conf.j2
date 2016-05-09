@@ -1,9 +1,49 @@
 # {{ ansible_managed }}
 
 input {
-  stdin { }
+{% for input in logstash_inputs %}
+  {{ input.name }} {
+{% if input.options is defined %}
+{% for option, value in input.options|dictsort %}
+{% if value is string %}
+    {{ option }} => "{{ value }}"
+{% else %}
+    {{ option }} => {{ value }}
+{% endif %}
+{% endfor %}
+{% endif %}
+  }
+{% endfor %}
 }
 
+{% if logstash_filters is defined %}
+filter {
+{% for filter in logstash_filters %}
+{% if filter.options is defined %}
+{% for option, value in filter.options|dictsort %}
+{% if value is string %}
+    {{ option }} => "{{ value }}"
+{% else %}
+    {{ option }} => {{ value }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+}
+{% endif %}
+
 output {
-  stdout { }
+{% for output in logstash_outputs %}
+  {{ output.name }} {
+{% if output.options is defined %}
+{% for option, value in output.options|dictsort %}
+{% if value is string %}
+    {{ option }} => "{{ value }}"
+{% else %}
+    {{ option }} => {{ value }}
+{% endif %}
+{% endfor %}
+{% endif %}
+  }
+{% endfor %}
 }

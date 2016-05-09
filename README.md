@@ -1,40 +1,35 @@
 logstash
 ========
 
+[![Build Status](https://travis-ci.org/kbrebanov/ansible-logstash.svg?branch=master)](https://travis-ci.org/kbrebanov/ansible-logstash)
+
 Installs and configures Logstash
 
 Requirements
 ------------
 
-This role requires Ansible 1.4 or higher.
+This role requires Ansible 1.9 or higher.
 
 Role Variables
 --------------
 
 | Name             | Default | Description                    |
-|------------------|---------|--------------------------------|
-| logstash_version | 1.5.3   | Version of Logstash to install |
+|:-----------------|:--------|:-------------------------------|
+| logstash_version | 2.3.2   | Version of Logstash to install |
 
 Dependencies
 ------------
 
-None
+- kbrebanov.java (OpenJDK 8)
 
 Example Playbook
 ----------------
 
 Install Logstash
-```
+```yaml
 - hosts: all
   roles:
-    - { role: kbrebanov.logstash }
-```
-
-Install Logstash specifying version
-```
-- hosts: all
-  roles:
-    - { role: kbrebanov.logstash, logstash_version: 1.4.4 }
+    - kbrebanov.logstash
 ```
 
 License

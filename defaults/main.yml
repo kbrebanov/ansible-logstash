@@ -1,4 +1,12 @@
 ---
 # defaults file for logstash
 
-logstash_version: 1.5.3
+logstash_version: 2.3.2
+
+logstash_inputs:
+  - name: file
+    options:
+      path: "/var/log/auth.log"
+
+logstash_outputs:
+  - name: stdout

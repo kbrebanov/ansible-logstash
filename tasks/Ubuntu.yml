@@ -2,31 +2,65 @@
 # tasks file for logstash (Ubuntu specific)
 
 - name: Install Elasticsearch PGP key
-  apt_key: >
-    url=https://packages.elastic.co/GPG-KEY-elasticsearch
-    state=present
-  tags: logstash
-
-- name: Add Logstash 1.4 repository
-  apt_repository: >
-    repo='deb http://packages.elasticsearch.org/logstash/1.4/debian stable main'
-    state=present
-  tags: logstash
+  become: yes
+  apt_key:
+    url: https://packages.elastic.co/GPG-KEY-elasticsearch
+    state: present
+  tags:
+    - logstash
 
 - name: Add Logstash 1.5 repository
-  apt_repository: >
-    repo='deb http://packages.elasticsearch.org/logstash/1.5/debian stable main'
-    state=present
-  tags: logstash
+  become: yes
+  apt_repository:
+    repo: 'deb http://packages.elasticsearch.org/logstash/1.5/debian stable main'
+    state: present
+  when: logstash_version|string|version_compare('1.5', '>=') and logstash_version|string|version_compare('2.0', '<')
+  tags:
+    - logstash
 
-- name: Install Logstash <= 1.4 packages
-  apt: name={{ item }} state=present update_cache=yes
-  with_items: logstash_packages_1_4
-  when: logstash_version | version_compare('1.5', operator='lt')
-  tags: logstash
+- name: Add Logstash 2.0 repository
+  become: yes
+  apt_repository:
+    repo: 'deb http://packages.elasticsearch.org/logstash/2.0/debian stable main'
+    state: present
+  when: logstash_version|string|version_compare('2.0', '>=') and logstash_version|string|version_compare('2.1', '<')
+  tags:
+    - logstash
 
-- name: Install Logstash >= 1.5 packages
-  apt: name={{ item }} state=present update_cache=yes
-  with_items: logstash_packages_1_5
-  when: logstash_version | version_compare('1.5', operator='ge')
-  tags: logstash
+- name: Add Logstash 2.1 repository
+  become: yes
+  apt_repository:
+    repo: 'deb http://packages.elasticsearch.org/logstash/2.1/debian stable main'
+    state: present
+  when: logstash_version|string|version_compare('2.1', '>=') and logstash_version|string|version_compare('2.2', '<')
+  tags:
+    - logstash
+
+- name: Add Logstash 2.2 repository
+  become: yes
+  apt_repository:
+    repo: 'deb http://packages.elasticsearch.org/logstash/2.2/debian stable main'
+    state: present
+  when: logstash_version|string|version_compare('2.2', '>=') and logstash_version|string|version_compare('2.3', '<')
+  tags:
+    - logstash
+
+- name: Add Logstash 2.3 repository
+  become: yes
+  apt_repository:
+    repo: 'deb http://packages.elasticsearch.org/logstash/2.3/debian stable main'
+    state: present
+  when: logstash_version|string|version_compare('2.3', '>=') and logstash_version|string|version_compare('2.4', '<')
+  tags:
+    - logstash
+
+- name: Install logstash packages
+  become: yes
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - "{{ logstash_packages }}"
+  tags:
+    - logstash

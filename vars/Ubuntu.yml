@@ -1,7 +1,5 @@
 ---
 # vars file for logstash (Ubuntu specific)
 
-logstash_packages_1_4:
-  - logstash={{ logstash_version }}*
-logstash_packages_1_5:
+logstash_packages:
   - logstash=1:{{ logstash_version }}*
